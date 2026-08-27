@@ -17,8 +17,10 @@ This page explains how to automate Shipper from GitHub Actions.
     project: api
     profile: production
     force: true
+    providers: |
+      shippercli/provider-ploi:^1.0
   env:
-    HOSTING_API_KEY: ${{ secrets.HOSTING_API_KEY }}
+    PLOI_API_KEY: ${{ secrets.PLOI_API_KEY }}
 ```
 
 Supported inputs:
@@ -51,8 +53,10 @@ jobs:
           project: api
           profile: production
           force: true
+    providers: |
+      shippercli/provider-ploi:^1.0
         env:
-          HOSTING_API_KEY: ${{ secrets.HOSTING_API_KEY }}
+          PLOI_API_KEY: ${{ secrets.PLOI_API_KEY }}
 ```
 
 ## Preview Workflow Example
@@ -75,8 +79,10 @@ jobs:
           project: api
           profile: preview
           force: true
+    providers: |
+      shippercli/provider-ploi:^1.0
         env:
-          HOSTING_API_KEY: ${{ secrets.HOSTING_API_KEY }}
+          PLOI_API_KEY: ${{ secrets.PLOI_API_KEY }}
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
           GITHUB_HEAD_REF: ${{ github.head_ref }}
 ```
@@ -101,8 +107,10 @@ jobs:
           project: api
           profile: preview
           force: true
+    providers: |
+      shippercli/provider-ploi:^1.0
         env:
-          HOSTING_API_KEY: ${{ secrets.HOSTING_API_KEY }}
+          PLOI_API_KEY: ${{ secrets.PLOI_API_KEY }}
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
           GITHUB_HEAD_REF: ${{ github.head_ref }}
 ```
