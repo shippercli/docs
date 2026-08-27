@@ -11,7 +11,7 @@ This page explains how to automate Shipper from GitHub Actions.
 ## Reusable Shipper Action
 
 ```yaml
-- uses: ulties/shipper/.github/actions/shipper@v1.0.0
+- uses: shippercli/actions/.github/actions/shipper@v1.0.0
   with:
     command: apply
     project: api
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ulties/shipper/.github/actions/shipper@v1.0.0
+      - uses: shippercli/actions/.github/actions/shipper@v1.0.0
         with:
           command: apply
           project: api
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ulties/shipper/.github/actions/shipper@v1.0.0
+      - uses: shippercli/actions/.github/actions/shipper@v1.0.0
         with:
           command: apply
           project: api
@@ -95,7 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ulties/shipper/.github/actions/shipper@v1.0.0
+      - uses: shippercli/actions/.github/actions/shipper@v1.0.0
         with:
           command: destroy
           project: api
