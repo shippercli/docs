@@ -18,9 +18,9 @@ This page explains how to automate Shipper from GitHub Actions.
     profile: production
     force: true
     providers: |
-      shippercli/provider-ploi:^1.0
+      shippercli/provider-cpanel:^1.0
   env:
-    PLOI_API_KEY: ${{ secrets.PLOI_API_KEY }}
+    CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
 ```
 
 Supported inputs:
@@ -53,10 +53,10 @@ jobs:
           project: api
           profile: production
           force: true
-    providers: |
-      shippercli/provider-ploi:^1.0
+          providers: |
+            shippercli/provider-cpanel:^1.0
         env:
-          PLOI_API_KEY: ${{ secrets.PLOI_API_KEY }}
+          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
 ```
 
 ## Preview Workflow Example
@@ -79,10 +79,10 @@ jobs:
           project: api
           profile: preview
           force: true
-    providers: |
-      shippercli/provider-ploi:^1.0
+          providers: |
+            shippercli/provider-cpanel:^1.0
         env:
-          PLOI_API_KEY: ${{ secrets.PLOI_API_KEY }}
+          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
           GITHUB_HEAD_REF: ${{ github.head_ref }}
 ```
@@ -107,10 +107,10 @@ jobs:
           project: api
           profile: preview
           force: true
-    providers: |
-      shippercli/provider-ploi:^1.0
+          providers: |
+            shippercli/provider-cpanel:^1.0
         env:
-          PLOI_API_KEY: ${{ secrets.PLOI_API_KEY }}
+          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
           GITHUB_HEAD_REF: ${{ github.head_ref }}
 ```
