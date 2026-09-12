@@ -21,8 +21,9 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Validate front matter and links
-        shell: ruby {0}
+        shell: bash
         run: |
+          ruby <<'RUBY'
           require 'yaml'
 
           errors = []
@@ -63,3 +64,4 @@ jobs:
           end
 
           abort(errors.join("\n")) unless errors.empty?
+          RUBY
