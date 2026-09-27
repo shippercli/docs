@@ -69,7 +69,7 @@ Require explicit operator cleanup.
 
 Server provisioning is not universal. Confirm support and exact fields on the provider page.
 
-Ploi supports this contract for existing-server reuse and managed-server creation. Cleanup is limited to servers explicitly marked as Shipper-managed; provider accounts and unrelated servers are not eligible for automatic destruction.
+Ploi partially supports this contract for existing-server reuse and managed-server creation. Cleanup requires live account verification and is limited to the managed server identity derived by the provider; provider accounts and unrelated servers are not eligible for automatic destruction.
 
 ## Failure Modes
 
