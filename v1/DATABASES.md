@@ -61,9 +61,9 @@ it is not a guarantee about the latest published packages:
 
 | Provider | Audit PR | Verified source |
 | --- | --- | --- |
-| Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `c71fa3286da57026b8a169ddb3500c6909fe4351` |
-| Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `41ee587e474e45d3f05b34f165724e35b9b8ea53` |
-| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `b9960eba21783a7cbb5391163ebb489f8779a222` |
+| Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `ed881f4a7df801ba001f53cd0d43a00f55c54ab8` |
+| Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `a44bc3f655fb7a6aa66cca9b41e200d2ea449df8` |
+| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `71e9130e21c80df522d5aa2d78a7798d2383b6d2` |
 
 Check the installed version's README and release notes before relying on these
 options. These source checks do not establish live database connectivity.
@@ -229,6 +229,40 @@ site. Its documented API accepts `site_id` on database creation but does not
 provide an operation to attach an existing unlinked database. A mismatched or
 missing association causes apply to fail rather than report a working connection.
 Do not delete and recreate a production database to bypass this check.
+
+## Partial provisioning and environment verification
+
+In the audited Ploi and Forge versions above, each confirmed database creation
+writes its connection variables to the site environment before another database
+is created. This makes earlier successful connections available when a later
+creation fails. A fresh-provider retry is covered by simulated API tests for both
+providers; these tests do not prove live account behavior or database connectivity.
+
+Ploi additionally reads each connection back before continuing and verifies the
+selected values after its final environment update. Missing, malformed or
+explicitly failed environment responses cause refusal. Configuration steps run
+sequentially, so a failed step stops later configuration changes. Forge refuses
+to merge into malformed or incomplete existing dotenv content; its environment
+write does not yet verify persistence through readback.
+
+These operations are not atomic. Creation may succeed before credentials are
+stored, and a failed or ambiguous response may leave a resource behind. Neither
+audited provider has a durable credential journal or automatic multi-database
+rollback. Inspect the actual resource and restore verified connection settings
+before retrying an ambiguous failure. An immediate readback failure can also
+reflect delayed persistence; investigate it before retrying rather than assuming
+the database was not created.
+
+## Database engine declarations
+
+Forge checks the existing server's database engine before provisioning. `mysql`
+accepts MySQL or MariaDB, `mariadb` requires MariaDB, and `postgres`, `postgresql`
+or `pgsql` require PostgreSQL. A declaration does not change the server engine.
+
+Ploi accepts those SQL declaration labels and rejects unsupported types such as
+Redis, SQLite and MongoDB before API access. Matching the actual existing-server
+engine is still unverified; accepted syntax is not proof of engine compatibility.
+Confirm that the selected server supports the database type you intend to use.
 
 ## Preview Pattern
 
