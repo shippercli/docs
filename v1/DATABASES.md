@@ -63,7 +63,7 @@ it is not a guarantee about the latest published packages:
 | --- | --- | --- |
 | Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `ed881f4a7df801ba001f53cd0d43a00f55c54ab8` |
 | Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `87fdcf88f598fd41f5f30bf4390903efe691dea7` |
-| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `71e9130e21c80df522d5aa2d78a7798d2383b6d2` |
+| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `7810a466f0a4cb97240886fbf90522e541400483` |
 
 Check the installed version's README and release notes before relying on these
 options. These source checks do not establish live database connectivity.
@@ -246,9 +246,30 @@ to merge into malformed or incomplete existing dotenv content and verifies the
 requested values through a fresh read after every environment write. Ignored or
 unreadable writes stop later provisioning steps.
 
+At the EasyPanel audit commit above, each confirmed database creation also
+writes the accumulated connection variables into the application environment
+and reads them back before another database is created. A fresh-provider retry
+reuses the first confirmed database and password after a later creation fails.
+Missing, malformed, or mismatched readback stops further provisioning with a
+fixed diagnostic.
+
+EasyPanel verifies its final app environment update before configuring workers,
+schedules, domains, or triggering deployment. Readback must contain every
+expected variable, including retained settings, ownership markers, empty values,
+numeric values, and literal secrets. Server-added unrelated variables are
+allowed. Ignored writes, missing or wrong-type content, incomplete dotenv, and
+lost retained variables cause refusal. Worker and scheduler environment writes
+do not yet have equivalent readback guarantees.
+
+These EasyPanel behaviors are covered by public-flow unit tests and six real
+local HTTP final-write scenarios. A negative control confirmed that the HTTP
+suite detects an ignored write when verification is disabled. The production-only
+ZIP consumer also passes this suite. These checks do not prove database
+connectivity or live EasyPanel persistence behavior, and the audit PR is unmerged.
+
 These operations are not atomic. Creation may succeed before credentials are
-stored, and a failed or ambiguous response may leave a resource behind. Neither
-audited provider has a durable credential journal or automatic multi-database
+stored, and a failed or ambiguous response may leave a resource behind. None of these three
+audited providers has a durable credential journal or automatic multi-database
 rollback. Inspect the actual resource and restore verified connection settings
 before retrying an ambiguous failure. An immediate readback failure can also
 reflect delayed persistence; investigate it before retrying rather than assuming
