@@ -12,8 +12,13 @@ This page explains how to run temporary pull request environments.
 
 - branch from PR context
 - preview domain derived from PR number
-- preview database names derived from PR number
-- optional managed server creation with cleanup
+- optional provider-supported preview database names derived from PR number
+- use an existing server unless the selected provider supports managed server lifecycle
+
+Preview behavior is provider-dependent. Check the selected provider's capability
+manifest and documentation before enabling preview databases, managed servers,
+or automated cleanup. A profile name and PR-specific domain do not by themselves
+create isolated infrastructure or guarantee that resources will be removed.
 
 ## Example
 
@@ -21,31 +26,31 @@ This page explains how to run temporary pull request environments.
 projects:
   api:
     provider: hosting
-    databases:
-      main:
-        name: "myapp_preview_${GITHUB_PR_NUMBER}"
-        user: "myapp_preview_${GITHUB_PR_NUMBER}"
-        type: mysql
     profiles:
       preview:
         branch: "${GITHUB_HEAD_REF}"
         domain: "api-preview-${GITHUB_PR_NUMBER}.example.com"
-        infrastructure:
-          server:
-            mode: create
-            name: "api-preview-${GITHUB_PR_NUMBER}"
-            cleanup: destroy
 ```
+
+This shows profile naming only. Replace `hosting` with a configured provider
+key. Add database or server lifecycle settings only when that provider supports
+the requested operation. See [provider capabilities](./PROVIDERS.md),
+[database lifecycle](./DATABASES.md), and [server lifecycle](./SERVER_LIFECYCLE.md).
 
 ## Recommended Workflow
 
 1. validate configuration
 2. apply the `preview` profile on PR open or update
-3. destroy the `preview` profile on PR close when cleanup is intended
+3. run the configured destroy or orphan-cleanup flow on PR close, after checking
+   that the provider supports cleanup for the resources involved
 
 ## Provider Differences
 
-Preview support depends on provider capabilities for sites, databases, and optionally servers.
+Preview support depends on provider capabilities for sites, databases, and
+optionally servers. Cleanup can have narrower support than creation: for
+example, a provider may enumerate and remove owned preview sites without being
+able to identify preview databases safely. Review each provider's capability
+manifest and ownership rules before relying on automatic cleanup.
 
 ## Failure Modes
 
