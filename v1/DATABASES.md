@@ -63,7 +63,7 @@ it is not a guarantee about the latest published packages:
 | --- | --- | --- |
 | Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `ed881f4a7df801ba001f53cd0d43a00f55c54ab8` |
 | Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `87fdcf88f598fd41f5f30bf4390903efe691dea7` |
-| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `7810a466f0a4cb97240886fbf90522e541400483` |
+| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `dbfc66438c39a5fe6ec5b12c48aca722809c79b5` |
 
 Check the installed version's README and release notes before relying on these
 options. These source checks do not establish live database connectivity.
@@ -259,13 +259,19 @@ expected variable, including retained settings, ownership markers, empty values,
 numeric values, and literal secrets. Server-added unrelated variables are
 allowed. Ignored writes, missing or wrong-type content, incomplete dotenv, and
 lost retained variables cause refusal. Worker and scheduler environment writes
-do not yet have equivalent readback guarantees.
+are also read back and compared before deploying workloads or restarting
+schedulers. Missing, malformed, or mismatched readback stops those follow-on
+operations.
 
-These EasyPanel behaviors are covered by public-flow unit tests and six real
-local HTTP final-write scenarios. A negative control confirmed that the HTTP
-suite detects an ignored write when verification is disabled. The production-only
-ZIP consumer also passes this suite. These checks do not prove database
-connectivity or live EasyPanel persistence behavior, and the audit PR is unmerged.
+These EasyPanel behaviors are covered by public-flow unit tests and ten real
+local HTTP scenarios across database/app and worker/scheduler writes. The
+worker/scheduler tests include successful, ignored, malformed, missing, wrong
+type, and lost-value responses, plus checks that a failed readback blocks the
+follow-on trigger. A negative control confirmed that the suite detects an
+ignored worker write when verification is disabled. The production-only ZIP
+consumer passes all ten HTTP suites, and PHP 8.3–8.5 CI passes at the source
+revision above. These checks do not prove database connectivity or live
+EasyPanel persistence behavior, and the audit PR is unmerged.
 
 These operations are not atomic. Creation may succeed before credentials are
 stored, and a failed or ambiguous response may leave a resource behind. None of these three
