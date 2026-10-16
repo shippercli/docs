@@ -61,9 +61,9 @@ it is not a guarantee about the latest published packages:
 
 | Provider | Audit PR | Verified source |
 | --- | --- | --- |
-| Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `2bd6b933faa706134392b16df064f4499e8f16f3` |
-| Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `9bb8a26a20ac926c95c9698da371994c62b555e0` |
-| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `3f3f24c2014f64646a00f2eb15cd0f56f9ca69d5` |
+| Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `c71fa3286da57026b8a169ddb3500c6909fe4351` |
+| Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `41ee587e474e45d3f05b34f165724e35b9b8ea53` |
+| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `b9960eba21783a7cbb5391163ebb489f8779a222` |
 
 Check the installed version's README and release notes before relying on these
 options. These source checks do not establish live database connectivity.
@@ -100,11 +100,58 @@ Different environment prefixes cannot make those two declarations separate
 databases. EasyPanel rejects database service names that collide after lowercase
 normalization, punctuation replacement or truncation to 48 characters.
 
-Each newly created database receives an independently generated password.
-Forge and EasyPanel can use an explicitly configured shared `database_password`;
-keep that value in an environment variable or secret manager. Never copy
-generated passwords into deployment logs or plans. Check the installed provider
-version's README for its supported mapping options before applying this example.
+### Choosing creation passwords
+
+For a new database, a nonempty application `<PREFIX>_PASSWORD` takes precedence
+over automatic generation. The selected value is sent unchanged to database
+creation and application delivery. Profile application values override project
+values. Forge and EasyPanel use provider-wide `database_password` as a fallback;
+otherwise passwords are generated independently. EasyPanel also considers
+retained application environment values when recreating a missing service.
+
+Empty explicit application passwords fail preflight. Raw application environment
+content must be complete: an unfinished quoted value cannot be silently ignored.
+Database names, users and hosts remain controlled by declarations/provider
+settings; supplying a password does not redirect the connection. Existing
+database credentials are not rotated by this creation behavior.
+
+The following excerpt combines the Ploi mapping above with two explicit secrets:
+
+```yaml
+providers:
+  ploi:
+    api_key: "${PLOI_API_KEY}"
+    server_id: "123"
+    database_environment_prefixes:
+      myapp_production: DB
+      myapp_cache: CACHE_DB
+projects:
+  api:
+    provider: ploi
+    databases:
+      main:
+        name: myapp_production
+        user: myapp_production
+        type: mysql
+      cache:
+        name: myapp_cache
+        user: myapp_cache
+        type: mysql
+    profiles:
+      production:
+        environment:
+          variables:
+            DB_PASSWORD: "${PRIMARY_DATABASE_PASSWORD}"
+            CACHE_DB_PASSWORD: "${CACHE_DATABASE_PASSWORD}"
+```
+
+Export all three referenced variables before loading the configuration and add
+your application source/domain configuration before deployment. The CLI resolves
+exported references in these canonical environment variables. The audit also
+includes [unmerged CLI #158](https://github.com/shippercli/cli/pull/158), which
+prevents a second expansion of imported secrets in profile provider configuration.
+Never copy credentials into deployment logs or plans. This example is a
+configuration/delivery check, not proof of database connectivity.
 
 ## Coolify audit connection format
 
