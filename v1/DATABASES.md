@@ -56,6 +56,18 @@ projects:
 
 ## Application connection variables
 
+The behavior in this section is verified in these **unmerged audit PRs**;
+it is not a guarantee about the latest published packages:
+
+| Provider | Audit PR | Verified source |
+| --- | --- | --- |
+| Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `2bd6b933faa706134392b16df064f4499e8f16f3` |
+| Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `9bb8a26a20ac926c95c9698da371994c62b555e0` |
+| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `3f3f24c2014f64646a00f2eb15cd0f56f9ca69d5` |
+
+Check the installed version's README and release notes before relying on these
+options. These source checks do not establish live database connectivity.
+
 Ploi, Forge, and EasyPanel provider versions supporting
 `database_environment_prefixes` deliver each newly created database's connection
 details to the application environment. A single database defaults to `DB_HOST`,
@@ -80,6 +92,13 @@ The cache connection then supplies `CACHE_DB_HOST`, `CACHE_DB_DATABASE`,
 those variables. Prefixes must be unique uppercase environment identifiers.
 Missing or ambiguous mappings fail validation before provisioning. Match
 template names exactly when database names contain interpolation placeholders.
+
+Database declarations must target distinct resources after provider name
+resolution. For example, Forge and Ploi reject `${PROJECT_NAME}_${PROFILE}`
+alongside `api_production` when the project is `api` and profile is `production`.
+Different environment prefixes cannot make those two declarations separate
+databases. EasyPanel rejects database service names that collide after lowercase
+normalization, punctuation replacement or truncation to 48 characters.
 
 Each newly created database receives an independently generated password.
 Forge and EasyPanel can use an explicitly configured shared `database_password`;
