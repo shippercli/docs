@@ -61,9 +61,9 @@ it is not a guarantee about the latest published packages:
 
 | Provider | Audit PR | Verified source |
 | --- | --- | --- |
-| Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `ed881f4a7df801ba001f53cd0d43a00f55c54ab8` |
-| Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `87fdcf88f598fd41f5f30bf4390903efe691dea7` |
-| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `dbfc66438c39a5fe6ec5b12c48aca722809c79b5` |
+| Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `834ee5ac3edf722d1c63be9798857a25eeabee7c` |
+| Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `042f90a2199f52a4afbe8d129ddeadeeb483b849` |
+| EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `5720cd2e754ae771377ccaf54cfc826064b84b62` |
 
 Check the installed version's README and release notes before relying on these
 options. These source checks do not establish live database connectivity.
@@ -148,8 +148,9 @@ projects:
 Export all three referenced variables before loading the configuration and add
 your application source/domain configuration before deployment. The CLI resolves
 exported references in these canonical environment variables. The audit also
-includes [unmerged CLI #158](https://github.com/shippercli/cli/pull/158), which
-prevents a second expansion of imported secrets in profile provider configuration.
+includes [unmerged CLI #158](https://github.com/shippercli/cli/pull/158) at
+`52551f26cb22b24786a13817591beb4c1ac430dc`, which prevents a second expansion of
+imported secrets in profile provider configuration.
 Never copy credentials into deployment logs or plans. This example is a
 configuration/delivery check, not proof of database connectivity.
 
@@ -157,7 +158,7 @@ configuration/delivery check, not proof of database connectivity.
 
 The format below is implemented in the **unmerged**
 [Coolify audit PR #1](https://github.com/shippercli/provider-coolify/pull/1),
-verified against source `a6db730d775111647785c4d0cebad40388ad1aca`.
+verified against source `b467b4a6a683fa67137528596aa8bcc024cd704c`.
 It is not a claim about a published provider release. Check the installed
 provider's README before using these fields.
 
