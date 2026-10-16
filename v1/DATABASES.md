@@ -87,6 +87,69 @@ keep that value in an environment variable or secret manager. Never copy
 generated passwords into deployment logs or plans. Check the installed provider
 version's README for its supported mapping options before applying this example.
 
+## Coolify audit connection format
+
+The format below is implemented in the **unmerged**
+[Coolify audit PR #1](https://github.com/shippercli/provider-coolify/pull/1),
+verified against source `a6db730d775111647785c4d0cebad40388ad1aca`.
+It is not a claim about a published provider release. Check the installed
+provider's README before using these fields.
+
+Coolify supplies namespaced variables derived from the normalized database
+resource name. For declaration name `main`, the prefix is `SHIPPER_DB_MAIN_`;
+for its PR 42 resource, it is `SHIPPER_DB_MAIN_PR_42_`. Duplicate declarations
+and names that collide after normalization or preview truncation are rejected.
+
+| Suffix | Meaning |
+| --- | --- |
+| `HOST`, `PORT` | Reported endpoint components, when available |
+| `DATABASE`, `USERNAME`, `PASSWORD` | Available database and credential components |
+| `URL` | Full reported connection URI, with known credential/database updates applied |
+
+The primary SQL connection also uses `DB_CONNECTION`, `DB_HOST`, `DB_DATABASE`,
+`DB_USERNAME` and `DB_PASSWORD`. Redis, Dragonfly and KeyDB require namespaced
+`HOST` and `PASSWORD`; MongoDB and ClickHouse additionally require `USERNAME`.
+The host must be nonempty. An explicitly supplied empty credential is accepted;
+a missing credential is not inferred to mean passwordless authentication.
+Unavailable required fields stop application environment operations.
+
+Configure the application to consume the namespaced `URL` when URI options or
+multiple hosts matter. It preserves topology and query options such as MongoDB
+`authSource`; no framework-specific default URL variable is set automatically.
+PostgreSQL named URI fields are reflected in component variables, and known
+credential updates replace stale query credentials as well as userinfo.
+Treat a URL containing credentials as a secret and keep it out of logs.
+
+Explicit application environment values take precedence over generated values.
+The CLI expands exported `${NAME}` references when loading the YAML. Export
+referenced secrets before running Shipper; unset references remain unresolved.
+For example, this connection-value excerpt supplies already-known Redis values
+that must match the database's actual configuration:
+
+```yaml
+projects:
+  api:
+    provider: coolify
+    databases:
+      main:
+        type: redis
+    profiles:
+      production:
+        environment:
+          variables:
+            SHIPPER_DB_MAIN_HOST: "${REDIS_HOST}"
+            SHIPPER_DB_MAIN_PASSWORD: "${REDIS_PASSWORD}"
+```
+
+Combine the excerpt with your provider and application source configuration.
+PR previews use separately configured `coolify.preview_environment_variables`;
+production project/profile secrets do not fill missing preview values.
+
+These are field-delivery and request-scope checks. Live database connectivity,
+application driver options, authentication/TLS and complete deployment/cleanup
+flows still require verification. Earlier resource operations may already have
+occurred when a later connection check fails; apply is not transactional.
+
 ## Re-applying existing databases
 
 Re-apply preserves existing database passwords and application secrets; it does
