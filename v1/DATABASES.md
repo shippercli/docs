@@ -62,7 +62,7 @@ it is not a guarantee about the latest published packages:
 | Provider | Audit PR | Verified source |
 | --- | --- | --- |
 | Ploi | [#26](https://github.com/shippercli/provider-ploi/pull/26) | `ed881f4a7df801ba001f53cd0d43a00f55c54ab8` |
-| Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `a44bc3f655fb7a6aa66cca9b41e200d2ea449df8` |
+| Forge | [#9](https://github.com/shippercli/provider-forge/pull/9) | `87fdcf88f598fd41f5f30bf4390903efe691dea7` |
 | EasyPanel | [#14](https://github.com/shippercli/provider-easypanel/pull/14) | `71e9130e21c80df522d5aa2d78a7798d2383b6d2` |
 
 Check the installed version's README and release notes before relying on these
@@ -242,8 +242,9 @@ Ploi additionally reads each connection back before continuing and verifies the
 selected values after its final environment update. Missing, malformed or
 explicitly failed environment responses cause refusal. Configuration steps run
 sequentially, so a failed step stops later configuration changes. Forge refuses
-to merge into malformed or incomplete existing dotenv content; its environment
-write does not yet verify persistence through readback.
+to merge into malformed or incomplete existing dotenv content and verifies the
+requested values through a fresh read after every environment write. Ignored or
+unreadable writes stop later provisioning steps.
 
 These operations are not atomic. Creation may succeed before credentials are
 stored, and a failed or ambiguous response may leave a resource behind. Neither
