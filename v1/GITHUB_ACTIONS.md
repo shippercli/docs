@@ -11,7 +11,7 @@ This page explains how to automate Shipper from GitHub Actions.
 ## Reusable Shipper Action
 
 ```yaml
-- uses: shippercli/actions/.github/actions/shipper@c2c276e12f831ba2c3377a063d579fede5cc5ecc
+- uses: shippercli/actions/.github/actions/shipper@2649f5132e10d405dddd77198e42c67035cfff4c
   with:
     command: apply
     project: api
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: shippercli/actions/.github/actions/shipper@c2c276e12f831ba2c3377a063d579fede5cc5ecc
+      - uses: shippercli/actions/.github/actions/shipper@2649f5132e10d405dddd77198e42c67035cfff4c
         with:
           command: apply
           project: api
@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: shippercli/actions/.github/actions/shipper@c2c276e12f831ba2c3377a063d579fede5cc5ecc
+      - uses: shippercli/actions/.github/actions/shipper@2649f5132e10d405dddd77198e42c67035cfff4c
         with:
           command: apply
           project: api
@@ -104,7 +104,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: shippercli/actions/.github/actions/shipper@c2c276e12f831ba2c3377a063d579fede5cc5ecc
+      - uses: shippercli/actions/.github/actions/shipper@2649f5132e10d405dddd77198e42c67035cfff4c
         with:
           command: destroy
           project: api
