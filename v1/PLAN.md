@@ -11,13 +11,12 @@ order: 61
 ## When to Run It
 
 - before apply in production
-- before destroy in temporary environments
 - after changing lifecycle-related configuration
 
 ## Example
 
 ```bash
-php shipper plan --project api --profile production
+vendor/bin/shipper plan api --profile=production
 ```
 
 ## What to Look For
@@ -25,7 +24,6 @@ php shipper plan --project api --profile production
 - site create vs reuse
 - database create vs reuse
 - server create vs reuse
-- any destroy behavior implied by the selected flow
 
 ## Related Pages
 
@@ -36,5 +34,4 @@ php shipper plan --project api --profile production
 
 ## Failure Modes
 
-- skipping plan before destructive work: use it to confirm destroy intent first
 - misreading temporary resource ownership: review lifecycle docs before apply or destroy

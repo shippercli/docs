@@ -18,7 +18,7 @@ composer require shippercli/cli:1.0.10 shippercli/provider-coolify:1.0.9
 
 ## Configure
 
-Set `COOLIFY_URL`, `COOLIFY_API_TOKEN`, `COOLIFY_SERVER_UUID`, and `COOLIFY_PROJECT_UUID` in your shell. Use a temporary API token scoped to the disposable project. Save this file as `shipper.yml`.
+Export `COOLIFY_URL`, `COOLIFY_API_TOKEN`, `COOLIFY_SERVER_UUID`, and `COOLIFY_PROJECT_UUID` in your shell. Use a temporary API token scoped to the disposable project. Save this file as `shipper.yml`.
 
 ```yaml
 providers:

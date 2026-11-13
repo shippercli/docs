@@ -11,7 +11,7 @@ order: 62
 ## Example
 
 ```bash
-php shipper apply --project api --profile production
+vendor/bin/shipper apply api --profile=production
 ```
 
 ## What Apply Uses

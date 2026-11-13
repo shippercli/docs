@@ -17,7 +17,7 @@ order: 60
 ## Example
 
 ```bash
-php shipper validate
+vendor/bin/shipper validate
 ```
 
 ## What It Should Catch
