@@ -12,8 +12,8 @@ This page explains how to run temporary pull request environments.
 
 - branch from PR context
 - preview domain derived from PR number
-- preview database names derived from PR number
-- optional managed server creation with cleanup
+- PR-specific database names where the provider supports preview databases
+- an existing server or a disposable server where the provider supports server lifecycle
 
 ## Example
 
@@ -21,31 +21,23 @@ This page explains how to run temporary pull request environments.
 projects:
   api:
     provider: hosting
-    databases:
-      main:
-        name: "myapp_preview_${GITHUB_PR_NUMBER}"
-        user: "myapp_preview_${GITHUB_PR_NUMBER}"
-        type: mysql
     profiles:
       preview:
         branch: "${GITHUB_HEAD_REF}"
         domain: "api-preview-${GITHUB_PR_NUMBER}.example.com"
-        infrastructure:
-          server:
-            mode: create
-            name: "api-preview-${GITHUB_PR_NUMBER}"
-            cleanup: destroy
 ```
+
+Replace `hosting` with a configured provider key and supply that provider's required deployment settings. This example shows how to name the preview profile and route. For separate infrastructure, check the [provider capabilities](./PROVIDERS.md), [database lifecycle](./DATABASES.md), and [server lifecycle](./SERVER_LIFECYCLE.md) before adding resources.
 
 ## Recommended Workflow
 
 1. validate configuration
 2. apply the `preview` profile on PR open or update
-3. destroy the `preview` profile on PR close when cleanup is intended
+3. On PR close, use the original PR values with the provider's supported destroy or orphan cleanup operation.
 
 ## Provider Differences
 
-Preview support depends on provider capabilities for sites, databases, and optionally servers.
+Check which resources your provider can create and remove. A PR-specific hostname identifies the preview route. Database and server isolation require their own supported configuration. A provider that can remove an owned preview site may still require manual cleanup of its database. Verify cleanup against a disposable preview before enabling it in production.
 
 ## Failure Modes
 
