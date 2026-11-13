@@ -11,7 +11,7 @@ order: 63
 ## Example
 
 ```bash
-php shipper destroy --project api --profile preview
+vendor/bin/shipper destroy api --profile=preview
 ```
 
 ## Typical Use Cases
@@ -22,7 +22,7 @@ php shipper destroy --project api --profile preview
 
 ## Review Before Running
 
-- [Plan](./PLAN.md) the selected environment first
+- review the target shown by `destroy` before confirming
 - confirm whether server cleanup is `destroy`, `retain`, or `manual`
 - confirm whether preview databases and sites are uniquely scoped to the target environment
 
@@ -36,4 +36,4 @@ php shipper destroy --project api --profile preview
 
 - destroying a long-lived environment by selecting the wrong profile
 - assuming unmanaged resources are safe to remove
-- skipping plan before a destructive workflow
+- using `--force` bypasses the confirmation prompt
