@@ -6,69 +6,62 @@ order: 10
 
 # Getting Started
 
-This page walks through the first successful deployment flow.
+Deploy an nginx container to a disposable Coolify project with an existing production environment. Run these commands from a clean directory with PHP 8.3 or newer and Composer 2.
 
 ## Install
 
 ```bash
-composer require ulties/shipper
+composer init --name=local/shipper-deployment --no-interaction
+composer config repositories.provider-coolify git https://github.com/shippercli/provider-coolify.git
+composer require shippercli/cli:1.0.10 shippercli/provider-coolify:1.0.9
 ```
 
-## Create a First Configuration
+## Configure
+
+Set `COOLIFY_URL`, `COOLIFY_API_TOKEN`, `COOLIFY_SERVER_UUID`, and `COOLIFY_PROJECT_UUID` in your shell. Use a temporary API token scoped to the disposable project. Save this file as `shipper.yml`.
 
 ```yaml
 providers:
-  hosting:
-    api_key: "${HOSTING_API_KEY}"
-
+  coolify:
+    url: ${COOLIFY_URL}
+    api_token: ${COOLIFY_API_TOKEN}
+    server_uuid: ${COOLIFY_SERVER_UUID}
+    project_uuid: ${COOLIFY_PROJECT_UUID}
 projects:
-  api:
-    provider: hosting
+  shipper-reusable-fixture:
+    provider: coolify
+    ssl:
+      enabled: false
     profiles:
       production:
-        branch: main
-        domain: "api.example.com"
+        domain: shipper-reusable-fixture.test
+        coolify:
+          environment_name: production
+          source_type: docker_image
+          docker_image: nginx
+          docker_registry_image_tag: alpine
+          ports_exposes: "80"
 ```
 
-Provider-specific keys belong on the provider pages:
-
-- [Ploi](/providers/ploi)
-- [Laravel Forge](/providers/forge)
-- [cPanel](/providers/cpanel)
-- [EasyPanel](/providers/easypanel)
-
-## Run the CLI in Order
-
-1. [Validate](./VALIDATE.md) the configuration
-2. [Plan](./PLAN.md) the deployment
-3. [Apply](./APPLY.md) the deployment
-
-## Validate
+## Validate, plan, and deploy
 
 ```bash
-php shipper validate
+vendor/bin/shipper validate
+vendor/bin/shipper plan shipper-reusable-fixture --profile=production
+vendor/bin/shipper apply shipper-reusable-fixture --profile=production
 ```
 
-## Plan
+Review the plan before confirming apply. Replace `COOLIFY_PROXY_ADDRESS` below with the address of the Coolify HTTP proxy and check for the nginx welcome page.
 
 ```bash
-php shipper plan --project api --profile production
+curl -fsS -H 'Host: shipper-reusable-fixture.test' http://COOLIFY_PROXY_ADDRESS/ |
+  grep -F 'Welcome to nginx'
 ```
 
-## Apply
+Clean up the fixture, then revoke the temporary token.
 
 ```bash
-php shipper apply --project api --profile production
+vendor/bin/shipper destroy shipper-reusable-fixture --profile=production
 ```
 
-## Failure Modes
-
-- missing provider credentials: set the required environment variables for the chosen provider
-- unknown provider key: ensure `projects.<name>.provider` matches a key under `providers`
-- incomplete profile: add at least the branch and domain for the first environment
-
-## Read Next
-
-- [Concepts](./CONCEPTS.md)
-- [Configuration Reference](./CONFIGURATION.md)
-- [GitHub Actions Workflows](./GITHUB_ACTIONS.md)
+See the [provider catalog](/providers) for other providers and their installation instructions.
