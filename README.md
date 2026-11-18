@@ -18,3 +18,5 @@ User documentation for Shipper CLI.
 ## License
 
 MIT
+
+[![advertisement](https://ads.servead.net/i/604f9b6d-ec4d-42e0-a72d-f90fef836947.svg)](https://ads.servead.net/c/604f9b6d-ec4d-42e0-a72d-f90fef836947)
