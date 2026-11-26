@@ -15,6 +15,11 @@ User documentation for Shipper CLI.
 
 - [v1](./v1/) - Current stable documentation
 
+## File Deployment
+
+- [FTP / FTPS deployment](./v1/FTP.md) - Install the provider, configure local
+  artifacts and dedicated remote directories, and understand tracked cleanup.
+
 ## License
 
 MIT

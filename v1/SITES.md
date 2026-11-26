@@ -46,6 +46,7 @@ Source, deploy mode, root paths, and site settings vary by provider:
 - [Laravel Forge](/providers/forge)
 - [cPanel](/providers/cpanel)
 - [EasyPanel](/providers/easypanel)
+- [FTP / FTPS tracked-file deployment](./FTP.md), which uploads files without creating hosting sites or domains
 
 ## Failure Modes
 
