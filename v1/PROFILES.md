@@ -71,6 +71,7 @@ projects:
 - [Database Lifecycle](./DATABASES.md)
 - [Server Lifecycle](./SERVER_LIFECYCLE.md)
 - [PR Preview Environments](./PR_PREVIEWS.md)
+- [FTP / FTPS paths and exclusions](./FTP.md)
 
 ## Failure Modes
 

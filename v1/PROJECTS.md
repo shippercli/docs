@@ -74,6 +74,7 @@ Repository, root, and deploy-source behavior vary by provider. Confirm on:
 - [Laravel Forge](/providers/forge)
 - [cPanel](/providers/cpanel)
 - [EasyPanel](/providers/easypanel)
+- [FTP / FTPS local artifacts](./FTP.md)
 
 ## Failure Modes
 

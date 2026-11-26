@@ -50,6 +50,7 @@ General structure is documented here. Exact fields and feature support vary by p
 - [Laravel Forge](/providers/forge)
 - [cPanel](/providers/cpanel)
 - [EasyPanel](/providers/easypanel)
+- [FTP / FTPS file deployment](./FTP.md)
 
 ## Failure Modes
 

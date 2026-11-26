@@ -47,6 +47,7 @@ Provider-specific fields and support levels are documented on provider pages:
 - [Laravel Forge](/providers/forge)
 - [cPanel](/providers/cpanel)
 - [EasyPanel](/providers/easypanel)
+- [FTP / FTPS](./FTP.md)
 - [Coolify provider and installation instructions](https://github.com/shippercli/provider-coolify)
 
 Check the [published provider verification matrix](https://github.com/shippercli/provider-gap-matrix#distribution-and-verification) before choosing a provider. It lists the installation path for each release, the CLI operations each provider exposes, and the operations verified on live targets.
